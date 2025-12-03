@@ -1,0 +1,124 @@
+[project]
+name = "sawitflood-lab"
+version = "1.0.0"
+description = "Analisis Keterkaitan Deforestasi Kelapa Sawit dan Risiko Banjir di Sumatra"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Rafli Ardiansyah" }
+]
+requires-python = ">=3.11"
+
+dependencies = [
+    # Data Processing
+    "pandas>=2.1.0",
+    "numpy>=1.26.0",
+    "pyarrow>=14.0.0",
+    
+    # Geospatial
+    "geopandas>=0.14.0",
+    "shapely>=2.0.0",
+    "pyproj>=3.6.0",
+    "fiona>=1.9.0",
+    
+    # Machine Learning
+    "scikit-learn>=1.3.0",
+    "xgboost>=2.0.0",
+    "imbalanced-learn>=0.11.0",
+    
+    # Explainable AI
+    "shap>=0.44.0",
+    
+    # Visualization
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "plotly>=5.18.0",
+    "folium>=0.15.0",
+    
+    # Dashboard
+    "streamlit>=1.29.0",
+    "streamlit-folium>=0.17.0",
+    
+    # Utilities
+    "pyyaml>=6.0.0",
+    "loguru>=0.7.0",
+    "tqdm>=4.66.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.8.0",
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ipykernel>=6.0.0",
+    "jupyterlab>=4.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+fix = true
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # Pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+    "ARG",    # flake8-unused-arguments
+    "SIM",    # flake8-simplify
+]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "E402",   # module level import not at top of file
+    "B006",   # mutable default argument - common in data science
+    "B007",   # loop control variable not used - common in iterrows
+    "B008",   # do not perform function calls in argument defaults
+    "B028",   # no explicit stacklevel
+    "B905",   # zip without explicit strict
+    "C901",   # too complex
+    "ARG001", # unused function argument
+    "ARG002", # unused method argument
+    "ARG005", # unused lambda argument
+    "C408",   # unnecessary dict() call - common in plotly/matplotlib
+    "E731",   # do not assign lambda - common in folium
+    "F401",   # imported but unused (handled case by case)
+    "F841",   # local variable assigned but never used
+    "SIM108", # use ternary operator
+    "W291",   # trailing whitespace in multiline strings
+    "W293",   # blank line contains whitespace
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-v --tb=short"
+
+[tool.uv]
+dev-dependencies = [
+    "ruff>=0.8.0",
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ipykernel>=6.0.0",
+    "jupyterlab>=4.0.0",
+]
+

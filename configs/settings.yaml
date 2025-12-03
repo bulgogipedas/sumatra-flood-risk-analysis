@@ -1,0 +1,172 @@
+# SawitFlood Lab - Configuration Settings
+# ===========================================
+
+# Project Metadata
+project:
+  name: "SawitFlood Lab"
+  version: "1.0.0"
+  description: "Analisis Keterkaitan Deforestasi Kelapa Sawit dan Risiko Banjir di Sumatra"
+  author: "Your Name"
+
+# Geographic Focus
+geography:
+  # Provinsi fokus analisis
+  provinces:
+    - "Sumatra Utara"
+    - "Riau"
+    - "Jambi"
+  
+  # Bounding box untuk Sumatra (approximate)
+  bounding_box:
+    min_lon: 95.0
+    max_lon: 106.0
+    min_lat: -6.0
+    max_lat: 6.0
+  
+  # CRS untuk analisis
+  target_crs: "EPSG:32647"  # UTM Zone 47N untuk Sumatra
+  geographic_crs: "EPSG:4326"
+
+# Temporal Settings
+temporal:
+  start_year: 2010
+  end_year: 2023
+  baseline_year: 2010
+  
+# Data Sources Configuration
+data_sources:
+  # Global Forest Change (Hansen et al.)
+  forest_cover:
+    source: "Global Forest Change"
+    url: "https://storage.googleapis.com/earthenginepartners-hansen/GFC-2023-v1.11/"
+    layers:
+      - "treecover2000"
+      - "lossyear"
+      - "gain"
+    resolution_m: 30
+  
+  # Palm Oil Plantations
+  palm_oil:
+    source: "Global Palm Oil Map / Descals et al."
+    alternative: "MapBiomas Indonesia"
+    resolution_m: 10
+  
+  # Administrative Boundaries
+  admin_boundaries:
+    source: "GADM Indonesia"
+    url: "https://gadm.org/download_country.html"
+    level: 2  # Kabupaten/Kota
+  
+  # Flood Events
+  flood_events:
+    source: "BNPB - Data Informasi Bencana Indonesia"
+    url: "https://dibi.bnpb.go.id/"
+    alternative: "EM-DAT / Desinventar"
+  
+  # Rainfall Data
+  rainfall:
+    source: "CHIRPS - Climate Hazards Group"
+    url: "https://www.chc.ucsb.edu/data/chirps"
+    temporal_resolution: "monthly"
+    spatial_resolution_deg: 0.05
+
+# Analysis Parameters
+analysis:
+  # Unit analisis
+  analysis_unit: "kabupaten"  # Options: kabupaten, kecamatan, das
+  
+  # Threshold untuk label risiko banjir
+  flood_risk_threshold:
+    high_risk_min_events: 3  # Minimal kejadian banjir per tahun untuk high risk
+    high_risk_min_impact: 1000  # Minimal korban terdampak
+  
+  # Feature engineering
+  features:
+    - "forest_loss_cumulative_pct"  # Persentase kehilangan hutan kumulatif
+    - "forest_loss_recent_pct"       # Kehilangan hutan 3 tahun terakhir
+    - "palm_oil_area_ha"             # Luas sawit (hektar)
+    - "palm_oil_pct"                 # Persentase luas sawit
+    - "palm_oil_growth_rate"         # Pertumbuhan sawit tahunan
+    - "rainfall_annual_mm"           # Curah hujan tahunan
+    - "rainfall_anomaly"             # Anomali curah hujan
+    - "elevation_mean"               # Ketinggian rata-rata
+    - "slope_mean"                   # Kemiringan rata-rata
+    - "population_density"           # Kepadatan penduduk
+
+# Model Configuration
+model:
+  # Primary model
+  primary:
+    algorithm: "xgboost"
+    task: "classification"
+    target: "flood_risk_label"  # binary: high/low
+  
+  # Hyperparameters
+  xgboost:
+    n_estimators: 200
+    max_depth: 6
+    learning_rate: 0.1
+    min_child_weight: 3
+    subsample: 0.8
+    colsample_bytree: 0.8
+    random_state: 42
+  
+  random_forest:
+    n_estimators: 200
+    max_depth: 10
+    min_samples_split: 5
+    min_samples_leaf: 2
+    random_state: 42
+  
+  # Cross-validation
+  cv_folds: 5
+  test_size: 0.2
+  
+  # Target metrics
+  target_metrics:
+    f1_score: 0.75
+    roc_auc: 0.80
+
+# Clustering Configuration
+clustering:
+  algorithm: "kmeans"
+  n_clusters: 5
+  features:
+    - "forest_loss_cumulative_pct"
+    - "palm_oil_pct"
+    - "rainfall_annual_mm"
+    - "flood_events_total"
+
+# Output Configuration
+output:
+  # Paths (relative to project root)
+  processed_data: "data/processed"
+  models: "models"
+  figures: "outputs/figures"
+  reports: "outputs/reports"
+  
+  # File formats
+  tabular_format: "parquet"  # Options: parquet, csv
+  geo_format: "gpkg"  # Options: gpkg, shp, geojson
+
+# Dashboard Configuration
+dashboard:
+  title: "SawitFlood Lab - Risk Dashboard"
+  default_province: "Riau"
+  map_center:
+    lat: 0.5
+    lon: 101.5
+  map_zoom: 7
+  color_scheme:
+    high_risk: "#d32f2f"
+    medium_risk: "#ff9800"
+    low_risk: "#4caf50"
+    forest: "#1b5e20"
+    palm_oil: "#ffeb3b"
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}"
+  file: "logs/sawitflood.log"
+

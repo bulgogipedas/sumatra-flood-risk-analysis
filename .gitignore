@@ -1,0 +1,129 @@
+# SawitFlood Lab - Git Ignore
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Environment
+.env
+.venv/
+venv/
+ENV/
+
+# Note: uv.lock should be committed for reproducibility
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+
+# Raw data (large files)
+data/raw/*
+!data/raw/.gitkeep
+!data/raw/flood_events/
+data/raw/flood_events/*.csv
+!data/raw/flood_events/DOWNLOAD_INSTRUCTIONS.txt
+
+# Processed data (can be regenerated)
+data/processed/*
+!data/processed/.gitkeep
+
+# External data (downloaded)
+data/external/*
+!data/external/.gitkeep
+!data/external/admin_boundaries/DOWNLOAD_INSTRUCTIONS.txt
+
+# Model files (large)
+models/*.pkl
+models/*.joblib
+
+# Output files
+outputs/figures/*.png
+outputs/figures/*.html
+outputs/reports/*.md
+outputs/reports/*.pdf
+!outputs/figures/.gitkeep
+!outputs/reports/.gitkeep
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Large geospatial files
+*.tif
+*.tiff
+*.shp
+*.shx
+*.dbf
+*.prj
+*.gpkg
+*.geojson
+
+# Keep placeholder files
+!.gitkeep
+
