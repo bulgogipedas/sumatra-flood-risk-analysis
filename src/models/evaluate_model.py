@@ -98,8 +98,11 @@ class ModelEvaluator:
         metadata_path = self.models_dir / f"{model_name}_metadata.json"
 
         if not model_path.exists():
-            # Try to find the latest model
-            model_files = list(self.models_dir.glob("flood_risk_*.pkl"))
+            # Try to find the latest model (exclude scaler files)
+            model_files = [
+                f for f in self.models_dir.glob("flood_risk_*.pkl")
+                if "_scaler" not in f.name
+            ]
             if model_files:
                 model_path = sorted(model_files)[-1]
                 model_name = model_path.stem
@@ -730,8 +733,11 @@ See `shap_summary.png` for SHAP-based feature importance.
         if model_name:
             self.load_model(model_name)
         else:
-            # Find latest model
-            model_files = list(self.models_dir.glob("flood_risk_*.pkl"))
+            # Find latest model (exclude scaler files)
+            model_files = [
+                f for f in self.models_dir.glob("flood_risk_*.pkl")
+                if "_scaler" not in f.name
+            ]
             if not model_files:
                 raise FileNotFoundError("No trained models found. Run train_model.py first.")
             latest_model = sorted(model_files)[-1]
@@ -756,8 +762,9 @@ See `shap_summary.png` for SHAP-based feature importance.
         # Risk typology
         typology_results = self.create_risk_typology(X)
 
-        # Scenario analysis
-        scenario_results = self.scenario_analysis(X, "forest_loss_cumulative_pct", change_pct=20)
+        # Scenario analysis - use a feature that exists in the dataset
+        scenario_feature = "flood_events_total" if "flood_events_total" in X.columns else X.columns[0]
+        scenario_results = self.scenario_analysis(X, scenario_feature, change_pct=20)
 
         # Generate report
         report_path = self.generate_report(results)
@@ -789,3 +796,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

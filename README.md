@@ -312,3 +312,4 @@ Dengan membuka kode dan metodologi, kami berharap:
 
 *Built with 💚 for Indonesia's environmental future*
 
+
