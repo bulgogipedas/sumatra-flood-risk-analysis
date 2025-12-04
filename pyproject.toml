@@ -14,35 +14,32 @@ dependencies = [
     "pandas>=2.1.0",
     "numpy>=1.26.0",
     "pyarrow>=14.0.0",
-    
     # Geospatial
     "geopandas>=0.14.0",
     "shapely>=2.0.0",
     "pyproj>=3.6.0",
     "fiona>=1.9.0",
-    
     # Machine Learning
     "scikit-learn>=1.3.0",
     "xgboost>=2.0.0",
     "imbalanced-learn>=0.11.0",
-    
     # Explainable AI
     "shap>=0.44.0",
-    
     # Visualization
     "matplotlib>=3.8.0",
     "seaborn>=0.13.0",
     "plotly>=5.18.0",
     "folium>=0.15.0",
-    
     # Dashboard
     "streamlit>=1.29.0",
     "streamlit-folium>=0.17.0",
-    
     # Utilities
     "pyyaml>=6.0.0",
     "loguru>=0.7.0",
     "tqdm>=4.66.0",
+    "statsmodels>=0.14.5",
+    "rasterio>=1.4.3",
+    "requests>=2.32.5",
 ]
 
 [project.optional-dependencies]
