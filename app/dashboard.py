@@ -1,6 +1,6 @@
 """
 IFRA - Indonesia Flood Risk Analytics
-Home Page
+Home Page with Executive Summary (Big 4 Style)
 """
 import streamlit as st
 import pandas as pd
@@ -20,81 +20,150 @@ def load_data():
     path = PROJECT_ROOT / "data" / "processed" / "complete_analysis_dataset.parquet"
     if path.exists():
         df = pd.read_parquet(path)
-        # Only fillna on numeric columns
         numeric_cols = df.select_dtypes(include=[np.number]).columns
         df[numeric_cols] = df[numeric_cols].fillna(0)
         return df
     return None
 
-# Title
-st.title("🌊 Indonesia Flood Risk Analytics")
-st.caption("Comprehensive analysis of flood risk factors across Indonesian provinces")
+@st.cache_data
+def load_correlation():
+    path = PROJECT_ROOT / "data" / "processed" / "correlation_matrix.csv"
+    if path.exists():
+        return pd.read_csv(path, index_col=0)
+    return None
 
-st.divider()
+# Title
+st.title("Indonesia Flood Risk Analytics")
 
 df = load_data()
+corr = load_correlation()
 
 if df is None:
-    st.error("⚠️ Data not found. Please run the data pipeline first.")
-    st.code("""
-cd sawitflood-lab
-uv run python scripts/04_merge_all_data.py
-    """)
+    st.error("Data tidak ditemukan. Jalankan data pipeline terlebih dahulu.")
     st.stop()
 
-# Key Metrics
-col1, col2, col3, col4 = st.columns(4)
+# =============================================================================
+# EXECUTIVE SUMMARY - BIG 4 STYLE
+# =============================================================================
+st.markdown("---")
 
-with col1:
-    st.metric("Total Flood Events", f"{int(df['flood_events_total'].sum()):,}")
+st.header("Executive Summary")
 
-with col2:
-    st.metric("Total Deaths", f"{int(df['flood_deaths'].sum()):,}")
+# Calculate key metrics
+total_floods = int(df["flood_events_total"].sum())
+total_deaths = int(df["flood_deaths"].sum())
+total_districts = len(df)
+affected_districts = len(df[df["flood_events_total"] > 0])
+pct_affected = affected_districts / total_districts * 100
 
-with col3:
-    if "forest_loss_pct" in df.columns:
-        st.metric("Avg Forest Loss", f"{df['forest_loss_pct'].mean():.1f}%")
-    else:
-        st.metric("Districts", f"{len(df):,}")
+if "island" in df.columns:
+    top_island = df.groupby("island")["flood_events_total"].sum().idxmax()
+    top_island_pct = df.groupby("island")["flood_events_total"].sum().max() / total_floods * 100
+else:
+    top_island = "N/A"
+    top_island_pct = 0
 
-with col4:
-    st.metric("Districts Analyzed", f"{len(df):,}")
+# Big 4 style narrative
+st.markdown(f"""
+### Situasi
 
-st.divider()
+Dalam periode 2020-2025, Indonesia mencatat **{total_floods:,} kejadian banjir** 
+yang mengakibatkan **{total_deaths:,} korban jiwa**. Dari {total_districts} kabupaten/kota 
+yang dianalisis, **{pct_affected:.0f}% telah mengalami minimal satu kejadian banjir**.
 
-# About
-st.header("About This Dashboard")
+Konsentrasi risiko tidak merata secara geografis. **{top_island}** menyumbang 
+**{top_island_pct:.0f}%** dari total kejadian nasional, mengindikasikan perlunya 
+pendekatan mitigasi yang terdiferensiasi berdasarkan karakteristik wilayah.
 
-st.markdown("""
-This dashboard analyzes the relationship between **land use changes**, 
-**climate patterns**, and **flood risk** across Indonesia.
+### Komplikasi
 
-**Data Sources:**
-- 🌊 **BNPB DIBI** - Flood events (2020-2025)
-- 🌲 **Global Forest Change** - Deforestation data
-- 🌧️ **CHIRPS** - Rainfall data
+Analisis korelasi menunjukkan hubungan antara perubahan tutupan lahan dan frekuensi banjir, 
+meskipun tidak bersifat deterministik. Model prediktif dengan akurasi ~63% mengkonfirmasi 
+bahwa **curah hujan** dan **deforestasi** merupakan prediktor signifikan, namun 
+variance yang belum terjelaskan mengindikasikan faktor-faktor lain yang belum tercakup 
+dalam analisis (infrastruktur drainase, topografi mikro, dll).
+
+### Implikasi
+
+**Untuk Pemerintah Daerah:**
+- Alokasikan anggaran mitigasi proporsional terhadap risk score wilayah
+- Integrasikan data tutupan lahan dalam perencanaan tata ruang
+
+**Untuk BNPB:**
+- Prioritaskan early warning system di {affected_districts} kabupaten terdampak
+- Kembangkan indeks risiko gabungan yang mencakup faktor lingkungan
+
+**Untuk Sektor Swasta:**
+- Pertimbangkan risk assessment berbasis lokasi untuk keputusan investasi
+- Kontribusi pada program konservasi DAS sebagai bagian dari CSR
 """)
 
-st.info("👈 Use the **sidebar** to navigate to different analysis pages")
+st.markdown("---")
 
-st.divider()
+# =============================================================================
+# KEY METRICS
+# =============================================================================
+st.header("Angka Kunci")
 
-# Quick View
-st.header("Top Affected Areas")
+col1, col2, col3, col4, col5 = st.columns(5)
+
+with col1:
+    st.metric("Kejadian Banjir", f"{total_floods:,}")
+
+with col2:
+    st.metric("Korban Jiwa", f"{total_deaths:,}")
+
+with col3:
+    st.metric("Kabupaten Terdampak", f"{affected_districts}")
+
+with col4:
+    if "forest_loss_pct" in df.columns:
+        avg_defor = df["forest_loss_pct"].mean()
+        st.metric("Rata-rata Deforestasi", f"{avg_defor:.1f}%")
+
+with col5:
+    st.metric("Cakupan Risiko", f"{pct_affected:.0f}%")
+
+st.markdown("---")
+
+# =============================================================================
+# QUICK INSIGHTS
+# =============================================================================
+st.header("Quick Insights")
 
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("By Flood Events")
-    top = df.nlargest(5, "flood_events_total")[["province", "kabupaten", "flood_events_total"]]
-    top.columns = ["Province", "District", "Events"]
+    st.subheader("Top 5 Provinsi - Kejadian")
+    top = df.groupby("province")["flood_events_total"].sum().nlargest(5).reset_index()
+    top.columns = ["Provinsi", "Kejadian"]
     st.dataframe(top, hide_index=True, use_container_width=True)
 
 with col2:
-    st.subheader("By Deaths")
-    top = df.nlargest(5, "flood_deaths")[["province", "kabupaten", "flood_deaths"]]
-    top.columns = ["Province", "District", "Deaths"]
+    st.subheader("Top 5 Provinsi - Korban")
+    top = df.groupby("province")["flood_deaths"].sum().nlargest(5).reset_index()
+    top.columns = ["Provinsi", "Korban Jiwa"]
     st.dataframe(top, hide_index=True, use_container_width=True)
 
-st.divider()
-st.caption("IFRA | Data: BNPB, Global Forest Change, CHIRPS")
+st.markdown("---")
+
+# =============================================================================
+# NAVIGATION
+# =============================================================================
+st.header("Navigasi Dashboard")
+
+st.markdown("""
+| Halaman | Deskripsi |
+|---------|-----------|
+| **Flood Analysis** | Pola temporal dan spasial kejadian banjir |
+| **Land Impact** | Korelasi deforestasi dengan risiko banjir |
+| **Regional** | Perbandingan antar pulau dan provinsi |
+| **Choropleth Map** | Visualisasi peta interaktif per wilayah |
+| **Model & XAI** | Machine learning dan interpretasi model |
+| **Data Explorer** | Akses data mentah dan download |
+
+Gunakan **sidebar di kiri** untuk navigasi.
+""")
+
+st.markdown("---")
+st.caption("IFRA | Data: BNPB DIBI, Global Forest Change, CHIRPS")

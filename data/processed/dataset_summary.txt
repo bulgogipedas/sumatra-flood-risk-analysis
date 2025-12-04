@@ -1,0 +1,65 @@
+============================================================
+COMPLETE ANALYSIS DATASET SUMMARY
+============================================================
+
+Total Records: 667
+Total Columns: 41
+Provinces: 38
+Islands: 7
+
+Columns:
+  - province: object (667 non-null)
+  - kabupaten: object (667 non-null)
+  - flood_events_total: float64 (667 non-null)
+  - flood_deaths: int64 (667 non-null)
+  - flood_missing: int64 (667 non-null)
+  - flood_injured: int64 (667 non-null)
+  - flood_affected: int64 (667 non-null)
+  - flood_displaced: int64 (667 non-null)
+  - flood_houses_heavy: int64 (667 non-null)
+  - flood_houses_medium: int64 (667 non-null)
+  - flood_houses_light: int64 (667 non-null)
+  - flood_houses_flooded: int64 (667 non-null)
+  - year_first: int64 (667 non-null)
+  - year_last: int64 (667 non-null)
+  - years_active: int64 (667 non-null)
+  - flood_impact_score: float64 (667 non-null)
+  - flood_events_annual_avg: float64 (667 non-null)
+  - flood_frequency_category: category (667 non-null)
+  - forest_cover_2000_pct: float64 (619 non-null)
+  - forest_cover_2023_pct: float64 (619 non-null)
+  - forest_loss_pct: float64 (619 non-null)
+  - deforestation_rate_annual: float64 (619 non-null)
+  - palm_oil_pct: float64 (619 non-null)
+  - forest_to_palm_ratio: float64 (619 non-null)
+  - rainfall_annual_mean_mm: float64 (619 non-null)
+  - rainfall_wet_season_mm: float64 (619 non-null)
+  - rainfall_dry_season_mm: float64 (619 non-null)
+  - rainfall_extreme_days_avg: float64 (619 non-null)
+  - rainfall_max_daily_mm: float64 (619 non-null)
+  - rainfall_cv: float64 (619 non-null)
+  - island: object (667 non-null)
+  - flood_risk_label: int64 (667 non-null)
+  - flood_severity_index: float64 (667 non-null)
+  - deforestation_flood_product: float64 (667 non-null)
+  - palm_oil_flood_product: float64 (667 non-null)
+  - rainfall_flood_product: float64 (667 non-null)
+  - high_deforestation: int64 (667 non-null)
+  - high_palm_oil: int64 (667 non-null)
+  - high_extreme_rainfall: int64 (667 non-null)
+  - compound_risk_score: float64 (667 non-null)
+  - risk_category: category (667 non-null)
+
+============================================================
+DESCRIPTIVE STATISTICS
+============================================================
+
+       flood_events_total  flood_deaths  flood_missing  flood_injured  flood_affected  flood_displaced  flood_houses_heavy  flood_houses_medium  flood_houses_light  flood_houses_flooded   year_first    year_last  years_active  flood_impact_score  flood_events_annual_avg  forest_cover_2000_pct  forest_cover_2023_pct  forest_loss_pct  deforestation_rate_annual  palm_oil_pct  forest_to_palm_ratio  rainfall_annual_mean_mm  rainfall_wet_season_mm  rainfall_dry_season_mm  rainfall_extreme_days_avg  rainfall_max_daily_mm  rainfall_cv  flood_risk_label  flood_severity_index  deforestation_flood_product  palm_oil_flood_product  rainfall_flood_product  high_deforestation  high_palm_oil  high_extreme_rainfall  compound_risk_score
+count          667.000000    667.000000     667.000000     667.000000    6.670000e+02       667.000000          667.000000           667.000000          667.000000            667.000000   667.000000   667.000000    667.000000          667.000000               667.000000             619.000000             619.000000       619.000000                 619.000000    619.000000            619.000000               619.000000              619.000000              619.000000                 619.000000             619.000000   619.000000        667.000000            667.000000                   667.000000              667.000000              667.000000          667.000000      667.00000             667.000000           667.000000
+mean            61.787745      8.170915       1.565217     128.581709    1.122251e+05      9037.556222          185.076462           247.304348          945.527736          18341.331334  2020.230885  2024.806597      5.271364        22574.340930                10.668427              41.031515              27.380218        13.651298                   0.593535     11.593266              0.756036              2578.005116             1676.440388              901.564378                  17.237749             123.985757     0.251613          0.499250              0.067237                   128.355939               92.596491               24.598967            0.190405        0.16042               0.197901            25.842602
+std            116.828887     27.913060      10.228612     979.243860    2.251204e+05     35201.894141          684.404534           911.603709         2644.609099          42863.868159     0.687123     0.587726      1.255548        43183.349117                19.355718              23.852919              23.010453         9.161142                   0.398311     14.964498              1.355671               555.255303              251.697747              334.150927                   3.941200              44.618102     0.024680          0.500375              0.128621                   224.144131              163.812167               41.921094            0.392915        0.36727               0.398716             9.497616
+min              1.000000      0.000000       0.000000       0.000000    0.000000e+00         0.000000            0.000000             0.000000            0.000000              0.000000  2020.000000  2020.000000      1.000000            0.000000                 1.000000               5.000000               1.000000         0.000000                   0.000000      0.000000              0.000000              1473.900000             1071.716667              326.366667                   7.833333              37.350000     0.186500          0.000000              0.000000                     0.000000                0.000000                0.000000            0.000000        0.00000               0.000000             2.000000
+25%             16.000000      0.000000       0.000000       0.000000    4.656500e+03        38.000000            8.500000             3.000000           26.000000            409.000000  2020.000000  2025.000000      5.000000         1470.750000                 3.000000              22.385083               8.357519         6.723236                   0.292315      2.343437              0.094898              2182.116667             1477.225000              629.700000                  14.166667              94.066667     0.235500          0.000000              0.004381                    25.016838                6.053674                7.022087            0.000000        0.00000               0.000000            19.232551
+50%             37.000000      2.000000       0.000000       2.000000    3.182900e+04       588.000000           34.000000            32.000000          151.000000           3621.000000  2020.000000  2025.000000      6.000000         6000.600000                 6.600000              36.449677              20.575331        12.126127                   0.527223      4.761443              0.277288              2496.533333             1646.400000              882.983333                  16.833333             118.783333     0.254167          0.000000              0.017873                    66.550863               30.975428               15.592500            0.000000        0.00000               0.000000            26.855381
+75%             69.095238      9.000000       0.000000      13.000000    1.042210e+05      4657.000000          105.500000           131.500000          549.500000          14787.500000  2020.000000  2025.000000      6.000000        21420.500000                11.537533              58.079449              40.859789        17.854865                   0.776298     15.207705              0.831127              2923.433333             1854.633333             1082.633333                  19.500000             150.700000     0.267250          1.000000              0.063801                   150.171074               98.265593               27.265258            0.000000        0.00000               0.000000            31.334942
+max           1340.288556    618.000000     189.000000   11127.000000    1.619426e+06    371559.000000        14559.000000         17063.000000        30104.000000         537330.000000  2025.000000  2025.000000      6.000000       335741.400000               223.381426              95.000000              93.128828        44.706929                   1.943780     60.000000             15.591527              4317.600000             2459.216667             1985.700000                  30.333333             292.350000     0.325000          1.000000              1.000000                  2708.751633             1272.084649              512.783232            1.000000        1.00000               1.000000            54.897686

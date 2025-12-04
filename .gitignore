@@ -62,8 +62,6 @@ coverage.xml
 venv/
 ENV/
 
-# Note: uv.lock should be committed for reproducibility
-
 # IDE
 .idea/
 .vscode/
@@ -77,25 +75,13 @@ Thumbs.db
 
 # Project specific
 
-# Raw data (large files)
+# Raw data (large files) - NOT NEEDED FOR DEPLOYMENT
 data/raw/*
 !data/raw/.gitkeep
-!data/raw/flood_events/
-data/raw/flood_events/*.csv
-!data/raw/flood_events/DOWNLOAD_INSTRUCTIONS.txt
 
-# Processed data (can be regenerated)
-data/processed/*
-!data/processed/.gitkeep
-
-# External data (downloaded)
+# External data (large geospatial files) - NOT NEEDED FOR DEPLOYMENT
 data/external/*
 !data/external/.gitkeep
-!data/external/admin_boundaries/DOWNLOAD_INSTRUCTIONS.txt
-
-# Model files (large)
-models/*.pkl
-models/*.joblib
 
 # Output files
 outputs/figures/*.png
@@ -114,16 +100,15 @@ tmp/
 temp/
 *.tmp
 
-# Large geospatial files
+# Large geospatial files (except in data folders we need)
 *.tif
 *.tiff
 *.shp
 *.shx
 *.dbf
 *.prj
-*.gpkg
-*.geojson
 
 # Keep placeholder files
 !.gitkeep
 
+# NOTE: data/processed/ and models/ are INCLUDED for Streamlit Cloud deployment

@@ -1,0 +1,97 @@
+{
+  "model_type": "xgboost",
+  "feature_names": [
+    "forest_loss_pct",
+    "palm_oil_pct",
+    "rainfall_annual_mean_mm",
+    "rainfall_extreme_days_avg",
+    "high_deforestation",
+    "high_rainfall",
+    "high_agriculture",
+    "defor_rain",
+    "agri_rain"
+  ],
+  "created_at": "2025-12-04T14:15:11.271785",
+  "training_history": {
+    "metrics": {
+      "accuracy": 0.5895522388059702,
+      "precision": 0.48148148148148145,
+      "recall": 0.49056603773584906,
+      "f1_score": 0.48598130841121495,
+      "roc_auc": 0.5930584672723037
+    },
+    "cv_results": {
+      "accuracy": {
+        "mean": 0.5530804623499046,
+        "std": 0.0396528211278926,
+        "scores": [
+          0.5895522388059702,
+          0.6119402985074627,
+          0.5263157894736842,
+          0.518796992481203,
+          0.518796992481203
+        ]
+      },
+      "f1": {
+        "mean": 0.4583136082747341,
+        "std": 0.060131994458338535,
+        "scores": [
+          0.4954128440366973,
+          0.559322033898305,
+          0.42201834862385323,
+          0.4074074074074074,
+          0.4074074074074074
+        ]
+      },
+      "roc_auc": {
+        "mean": 0.5892343640810622,
+        "std": 0.04997721898949336,
+        "scores": [
+          0.5954861111111112,
+          0.6809923130677848,
+          0.5490566037735849,
+          0.5795990566037735,
+          0.5410377358490566
+        ]
+      }
+    },
+    "feature_importance": [
+      {
+        "feature": "agri_rain",
+        "importance": 0.13590629398822784
+      },
+      {
+        "feature": "defor_rain",
+        "importance": 0.13335183262825012
+      },
+      {
+        "feature": "high_deforestation",
+        "importance": 0.13070811331272125
+      },
+      {
+        "feature": "high_rainfall",
+        "importance": 0.1283196359872818
+      },
+      {
+        "feature": "rainfall_annual_mean_mm",
+        "importance": 0.11095473915338516
+      },
+      {
+        "feature": "rainfall_extreme_days_avg",
+        "importance": 0.10655660927295685
+      },
+      {
+        "feature": "palm_oil_pct",
+        "importance": 0.09908711910247803
+      },
+      {
+        "feature": "forest_loss_pct",
+        "importance": 0.09088468551635742
+      },
+      {
+        "feature": "high_agriculture",
+        "importance": 0.0642310082912445
+      }
+    ]
+  }
+}
