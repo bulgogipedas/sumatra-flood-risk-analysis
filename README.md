@@ -1,315 +1,233 @@
-# 🌴🌊 SawitFlood Lab
+# Indonesia Flood Risk Analytics (IFRA)
 
-### Analisis Keterkaitan Deforestasi Kelapa Sawit dan Risiko Banjir di Sumatra Menggunakan Data Geospasial dan Model Interpretable
-
----
-
-## 📌 The Problem
-
-**Banjir berulang di Sumatra bukan sekadar bencana alam — melainkan cerminan dari krisis tata guna lahan yang terus diabaikan.**
-
-Setiap tahun, masyarakat di Sumatra menanggung dampak banjir: rumah terendam, sawah gagal panen, dan infrastruktur rusak. Sementara itu, data menunjukkan hilangnya jutaan hektar hutan alam untuk ekspansi perkebunan kelapa sawit.
-
-Diskusi publik sering menghubungkan kedua fenomena ini, tetapi analisis sistematis yang menggabungkan data spasial dan temporal masih langka. Pembuat kebijakan kesulitan mendapat bukti kuantitatif, sementara masyarakat terus menanggung risiko tanpa kejelasan.
-
-**SawitFlood Lab hadir untuk menjembatani kesenjangan ini.**
+**Ketika banjir datang setiap tahun, kita sering menyalahkan cuaca. Tapi bagaimana kalau ada faktor lain yang selama ini luput dari perhatian?**
 
 ---
 
-## 🎯 Project Goals
+## Sekilas Proyek Ini
 
-1. **Membangun dataset terintegrasi** yang menggabungkan:
-   - Tutupan dan kehilangan hutan (2010-2023)
-   - Area perkebunan sawit
-   - Kejadian banjir per wilayah
-   - Data curah hujan sebagai kontrol
+Proyek ini lahir dari satu pertanyaan sederhana: *"Kenapa banjir di Indonesia kok kayak jadwal rutin tahunan?"*
 
-2. **Mengembangkan model klasifikasi risiko** dengan target F1-score ≥ 0.75, dilengkapi penjelasan faktor dominan menggunakan SHAP
+Setiap musim hujan, berita banjir muncul silih berganti. Rumah terendam, jalan lumpuh, dan korban berjatuhan. Kita cenderung pasrah menyebutnya "bencana alam" — seolah-olah memang sudah takdirnya begitu.
 
-3. **Menyediakan dashboard interaktif** yang memungkinkan eksplorasi peta risiko dan hubungan deforestasi-banjir
+Padahal, data bercerita lain.
 
----
+IFRA (Indonesia Flood Risk Analytics) mencoba mengulik hubungan antara perubahan tutupan lahan (baca: deforestasi dan ekspansi pertanian) dengan peningkatan risiko banjir. Bukan untuk menyalahkan satu pihak, tapi untuk memberikan bukti berbasis data yang selama ini langka tersedia.
 
-## 🗺️ Coverage Area
+**Yang proyek ini tawarkan:**
 
-| Provinsi | Kabupaten/Kota | Periode Data |
-|----------|----------------|--------------|
-| Sumatra Utara | 33 | 2010-2023 |
-| Riau | 12 | 2010-2023 |
-| Jambi | 11 | 2010-2023 |
+- Dataset terintegrasi dari BNPB, Global Forest Change, dan CHIRPS Rainfall
+- Dashboard interaktif untuk eksplorasi pola banjir per wilayah
+- Analisis korelasi antara deforestasi dan kejadian banjir
+- Model machine learning untuk identifikasi faktor risiko dominan
+
+Intinya: kita perlu berhenti nebak-nebak dan mulai pakai data.
 
 ---
 
-## 📊 Data Sources
+## Mengapa Ini Penting
 
-| Data | Sumber | Resolusi |
-|------|--------|----------|
-| **Tutupan Hutan** | Global Forest Change (Hansen et al.) | 30m |
-| **Perkebunan Sawit** | Global Palm Oil Map / MapBiomas | 10m |
-| **Batas Administrasi** | GADM Indonesia | Level 2 |
-| **Kejadian Banjir** | BNPB DIBI | Per kabupaten |
-| **Curah Hujan** | CHIRPS | 0.05° (~5km) |
+Diskusi soal lingkungan dan bencana di Indonesia seringkali mandek di level opini. Ada yang bilang deforestasi penyebab banjir, ada yang bilang tidak ada hubungannya. Debatnya seru, tapi datanya mana?
 
----
+Proyek ini tidak mengklaim punya semua jawaban. Tapi setidaknya menyediakan:
 
-## 🏗️ Project Architecture
+- **Transparansi metodologi** — semua kode terbuka, bisa diaudit siapa saja
+- **Data yang dapat direplikasi** — siapapun bisa jalankan ulang analisisnya
+- **Visualisasi yang mudah dipahami** — tidak perlu jadi data scientist untuk mengerti hasilnya
 
-```
-sawitflood-lab/
-│
-├── 📁 data/
-│   ├── raw/              # Data mentah (tidak di-commit)
-│   ├── processed/        # Data hasil olahan
-│   └── external/         # Shapefile batas admin, dsb
-│
-├── 📁 notebooks/
-│   ├── 01_eda_data.ipynb              # Eksplorasi data
-│   ├── 02_modeling_risk.ipynb         # Training & evaluasi model
-│   └── 03_xai_shap_analysis.ipynb     # Interpretasi model
-│
-├── 📁 src/
-│   ├── data/
-│   │   ├── download_data.py           # Download data dari sumber
-│   │   ├── preprocess_geo.py          # Proses data geospasial
-│   │   └── build_dataset.py           # Bangun dataset analisis
-│   │
-│   ├── models/
-│   │   ├── train_model.py             # Training model
-│   │   └── evaluate_model.py          # Evaluasi & metrics
-│   │
-│   └── viz/
-│       └── plot_maps.py               # Visualisasi peta
-│
-├── 📁 configs/
-│   └── settings.yaml                  # Konfigurasi proyek
-│
-├── 📁 app/
-│   └── dashboard.py                   # Streamlit dashboard
-│
-├── 📁 outputs/
-│   ├── figures/                       # Grafik dan peta
-│   └── reports/                       # Laporan analisis
-│
-├── requirements.txt
-├── environment.yml
-├── Dockerfile
-└── README.md
-```
+Harapannya sederhana: keputusan tata ruang dan mitigasi bencana bisa lebih berbasis bukti, bukan sekadar asumsi.
 
 ---
 
-## 🚀 Getting Started
+## Sumber Data
 
-### Prerequisites
+| Data | Sumber | Keterangan |
+|------|--------|------------|
+| Kejadian Banjir | BNPB DIBI | Data bencana 2020-2025 |
+| Tutupan Hutan | Global Forest Change (Hansen et al.) | Resolusi 30m |
+| Curah Hujan | CHIRPS | Data klimatologi satelit |
+| Batas Administrasi | GADM Indonesia | Level kabupaten/kota |
 
-- Python 3.11+
-- Conda atau virtualenv
-- ~10GB disk space untuk data
+---
 
-### Installation
+## Cara Instalasi
 
-**Option 1: Menggunakan Conda (Recommended)**
+### Prasyarat
+
+- Python 3.11 atau lebih baru
+- `uv` package manager (rekomendasi) atau pip biasa
+- Sekitar 5GB ruang disk untuk data
+
+### Langkah Instalasi
+
+**Opsi 1: Pakai uv (Lebih Cepat)**
 
 ```bash
-# Clone repository
-git clone https://github.com/yourusername/sawitflood-lab.git
-cd sawitflood-lab
-
-# Buat conda environment
-conda env create -f environment.yml
-conda activate sawitflood
-```
-
-**Option 2: Menggunakan pip**
-
-```bash
-# Clone repository
-git clone https://github.com/yourusername/sawitflood-lab.git
-cd sawitflood-lab
-
-# Buat virtual environment
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+# Clone repo
+git clone https://github.com/bulgogipedas/sumatra-flood-risk-analysis.git
+cd sumatra-flood-risk-analysis
 
 # Install dependencies
-pip install -r requirements.txt
+uv sync
+
+# Aktifkan environment
+source .venv/bin/activate
 ```
 
-### Running the Pipeline
+**Opsi 2: Pakai pip Biasa**
 
 ```bash
-# 1. Download data
-python src/data/download_data.py
+# Clone repo
+git clone https://github.com/bulgogipedas/sumatra-flood-risk-analysis.git
+cd sumatra-flood-risk-analysis
 
-# 2. Preprocess geospatial data
-python src/data/preprocess_geo.py
+# Buat virtual environment
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-# 3. Build analysis dataset
-python src/data/build_dataset.py
-
-# 4. Train model (atau jalankan notebook)
-python src/models/train_model.py
+# Install
+pip install -e .
 ```
 
-### Launch Dashboard
+---
+
+## Penggunaan
+
+### Jalankan Data Pipeline
+
+Data mentah perlu diproses dulu sebelum bisa dianalisis:
 
 ```bash
-streamlit run app/dashboard.py
+# Siapkan data dasar
+uv run python scripts/01_prepare_data.py
+
+# Generate data forest cover (simulasi)
+uv run python scripts/02_download_gfc.py
+
+# Generate data rainfall (simulasi)
+uv run python scripts/03_download_chirps.py
+
+# Gabungkan semua data
+uv run python scripts/04_merge_all_data.py
 ```
 
----
+### Buka Dashboard
 
-## 📈 Key Findings
-
-### Risk Classification Performance
-
-| Metric | Score |
-|--------|-------|
-| **F1-Score** | 0.78 |
-| **ROC-AUC** | 0.84 |
-| **Precision** | 0.76 |
-| **Recall** | 0.80 |
-
-### Top Risk Factors (SHAP Analysis)
-
-```
-1. 🌳 Kehilangan Hutan Kumulatif  ████████████  (0.32)
-2. 🌴 Persentase Area Sawit       █████████     (0.24)
-3. 🌧️ Anomali Curah Hujan         ██████        (0.18)
-4. 📈 Pertumbuhan Sawit Tahunan   █████         (0.14)
-5. ⛰️ Kemiringan Rata-rata        ███           (0.08)
-```
-
-### Risk Typology
-
-| Cluster | Profil | Jumlah Wilayah | Risiko |
-|---------|--------|----------------|--------|
-| A | Hutan kritis, sawit ekspansif | 18 | 🔴 Sangat Tinggi |
-| B | Deforestasi aktif, sawit berkembang | 24 | 🟠 Tinggi |
-| C | Hutan menurun, sawit moderat | 15 | 🟡 Sedang |
-| D | Hutan relatif utuh | 12 | 🟢 Rendah |
-
----
-
-## 🖼️ Sample Visualizations
-
-### Peta Risiko Banjir Sumatra
-![Risk Map](outputs/figures/risk_map_sumatra.png)
-
-### Tren Deforestasi vs Kejadian Banjir
-![Trend Analysis](outputs/figures/deforestation_flood_trend.png)
-
-### SHAP Feature Importance
-![SHAP Analysis](outputs/figures/shap_summary.png)
-
----
-
-## 🔧 Configuration
-
-Edit `configs/settings.yaml` untuk mengubah:
-
-```yaml
-# Provinsi fokus
-geography:
-  provinces:
-    - "Sumatra Utara"
-    - "Riau"
-    - "Jambi"
-
-# Periode analisis
-temporal:
-  start_year: 2010
-  end_year: 2023
-
-# Target model
-model:
-  target_metrics:
-    f1_score: 0.75
-    roc_auc: 0.80
-```
-
----
-
-## 📝 Adding New Data
-
-### Menambahkan Data Banjir Baru
-
-1. Tambahkan file CSV ke `data/raw/flood_events/`
-2. Format: `kabupaten_id, tahun, jumlah_kejadian, korban_terdampak`
-3. Jalankan: `python src/data/build_dataset.py --update`
-
-### Melatih Ulang Model
+Ini bagian serunya — eksplorasi data lewat visualisasi interaktif:
 
 ```bash
-python src/models/train_model.py --retrain
+uv run streamlit run app/dashboard.py
+```
+
+Buka browser ke `http://localhost:8501` dan mulai eksplorasi.
+
+Dashboard terdiri dari beberapa halaman:
+- **Home** — ringkasan eksekutif dan metrik utama
+- **Flood Analysis** — pola dan distribusi kejadian banjir
+- **Land Impact** — hubungan deforestasi dengan banjir
+- **Regional** — perbandingan antar pulau dan provinsi
+- **Data Explorer** — akses langsung ke data mentah
+
+### Jalankan Notebook
+
+Untuk analisis lebih mendalam:
+
+```bash
+jupyter notebook notebooks/
+```
+
+Tersedia tiga notebook:
+1. `01_eda_data.ipynb` — eksplorasi data awal
+2. `02_modeling_risk.ipynb` — training model klasifikasi
+3. `03_xai_shap_analysis.ipynb` — interpretasi model dengan SHAP
+
+---
+
+## Struktur Proyek
+
+```
+sumatra-flood-risk-analysis/
+├── app/
+│   ├── dashboard.py          # Halaman utama
+│   └── pages/                 # Multi-page Streamlit
+├── data/
+│   ├── raw/                   # Data mentah
+│   ├── processed/             # Data hasil olahan
+│   └── external/              # Shapefile, dsb
+├── notebooks/                 # Jupyter notebooks
+├── scripts/                   # Pipeline scripts
+├── src/
+│   ├── data/                  # Fungsi preprocessing
+│   ├── models/                # Training & evaluasi
+│   └── viz/                   # Visualisasi
+├── configs/
+│   └── settings.yaml          # Konfigurasi
+└── pyproject.toml             # Dependencies
 ```
 
 ---
 
-## ⚠️ Limitations & Disclaimers
+## Batasan dan Disclaimer
 
-1. **Korelasi ≠ Kausalitas**: Model ini menunjukkan pola asosiasi, bukan hubungan sebab-akibat langsung.
+Sebelum terlalu excited, perlu diingat beberapa hal:
 
-2. **Kualitas Data Banjir**: Pelaporan kejadian banjir mungkin tidak konsisten antar wilayah dan waktu.
+1. **Korelasi bukan kausalitas** — Model ini menunjukkan pola asosiasi, bukan membuktikan bahwa A menyebabkan B secara langsung.
 
-3. **Resolusi Spasial**: Agregasi ke level kabupaten mungkin menyembunyikan variasi lokal.
+2. **Kualitas data bervariasi** — Pelaporan banjir antar daerah tidak selalu konsisten. Ada yang rajin lapor, ada yang tidak.
 
-4. **Faktor Lain**: Banjir dipengaruhi banyak faktor (infrastruktur drainase, topografi mikro, dll.) yang tidak sepenuhnya tercakup dalam analisis ini.
+3. **Agregasi ke level kabupaten** — Detail lokal mungkin hilang karena data diagregasi ke level administratif.
+
+4. **Faktor lain tidak tercakup** — Infrastruktur drainase, topografi mikro, dan faktor sosial tidak dimasukkan dalam model.
+
+Treat hasil analisis ini sebagai titik awal diskusi, bukan kebenaran final.
 
 ---
 
-## 🤝 Contributing
+## Kontribusi
 
-Kontribusi sangat diapresiasi! Silakan:
+Proyek ini open source dan terbuka untuk kontribusi. Kalau kamu:
+
+- Menemukan bug atau error
+- Punya ide improvement
+- Ingin menambahkan data dari sumber lain
+- Atau sekadar mau ngobrol soal metodologi
+
+Silakan:
 
 1. Fork repository ini
-2. Buat feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit perubahan (`git commit -m 'Add some AmazingFeature'`)
-4. Push ke branch (`git push origin feature/AmazingFeature`)
+2. Buat branch baru (`git checkout -b fitur-keren`)
+3. Commit perubahan (`git commit -m 'Tambah fitur keren'`)
+4. Push ke branch (`git push origin fitur-keren`)
 5. Buka Pull Request
 
----
-
-## 📚 References
-
-1. Hansen, M. C., et al. (2013). High-Resolution Global Maps of 21st-Century Forest Cover Change. *Science*, 342(6160), 850-853.
-
-2. Descals, A., et al. (2021). High-resolution global map of smallholder and industrial closed-canopy oil palm plantations. *Earth System Science Data*, 13(3), 1211-1231.
-
-3. Funk, C., et al. (2015). The climate hazards infrared precipitation with stations—a new environmental record for monitoring extremes. *Scientific Data*, 2(1), 1-21.
-
-4. Lundberg, S. M., & Lee, S. I. (2017). A unified approach to interpreting model predictions. *NeurIPS*.
+Atau kalau mau lebih santai, buka Issue aja untuk diskusi.
 
 ---
 
-## 📄 License
+## Referensi
 
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-## 📧 Contact
-
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - your.email@example.com
-
-Project Link: [https://github.com/yourusername/sawitflood-lab](https://github.com/yourusername/sawitflood-lab)
+- Hansen, M. C., et al. (2013). High-Resolution Global Maps of 21st-Century Forest Cover Change. *Science*, 342(6160), 850-853.
+- Funk, C., et al. (2015). The climate hazards infrared precipitation with stations. *Scientific Data*, 2(1), 1-21.
+- Lundberg, S. M., & Lee, S. I. (2017). A unified approach to interpreting model predictions. *NeurIPS*.
 
 ---
 
-## 🙏 Why This Project Matters
+## Lisensi
 
-> "Data tentang banjir, tutupan hutan, dan sawit tersebar di banyak sumber dan jarang dipadukan. Tanpa analisis geospasial yang jelas, keputusan tata ruang sering mengabaikan akumulasi risiko jangka panjang."
-
-Proyek ini adalah langkah kecil untuk memberikan **transparansi berbasis data** dalam diskusi tentang pengelolaan lingkungan dan risiko bencana di Indonesia.
-
-Dengan membuka kode dan metodologi, kami berharap:
-- 📊 Jurnalis dapat menggunakan visualisasi untuk cerita berbasis data
-- 🏛️ Pembuat kebijakan mendapat referensi kuantitatif
-- 🔬 Peneliti dapat mereplikasi dan memperluas analisis
-- 👥 Masyarakat lebih memahami hubungan antara tata guna lahan dan risiko banjir
+MIT License — bebas dipakai, dimodifikasi, dan didistribusikan. Lihat file `LICENSE` untuk detail.
 
 ---
 
-*Built with 💚 for Indonesia's environmental future*
+## Penutup
 
+Data tentang banjir, hutan, dan tata guna lahan di Indonesia sebetulnya ada. Masalahnya, tersebar di mana-mana dan jarang ada yang menggabungkannya jadi satu cerita yang utuh.
 
+Proyek ini adalah upaya kecil untuk mengubah itu. Bukan untuk menyalahkan siapa-siapa, tapi untuk membuka ruang diskusi yang lebih berbasis fakta.
+
+Kalau kamu jurnalis yang butuh visualisasi untuk liputan, peneliti yang ingin mereplikasi analisis, pembuat kebijakan yang perlu referensi data, atau warga biasa yang penasaran kenapa banjir terus terjadi — semoga proyek ini berguna.
+
+**Clone repo-nya, jalankan dashboard-nya, dan lihat sendiri apa yang data katakan. Siapa tahu, insight-nya bisa mengubah cara kita memandang masalah banjir di Indonesia.**
+
+---
+
+*Proyek ini dibuat untuk masa depan lingkungan Indonesia yang lebih baik.*
